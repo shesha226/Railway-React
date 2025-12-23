@@ -70,7 +70,7 @@ function Services() {
         {railwayRoutes.map((route, index) => (
           <motion.div
             key={index}
-            className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition flex flex-col justify-between"
+            className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition flex flex-col justify-between hover:scale-105"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

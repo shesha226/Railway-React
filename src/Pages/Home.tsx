@@ -1,8 +1,30 @@
 import train from '../assets/srilankatrain5-1.jpg';
-import { motion } from 'framer-motion';
+import jaffna from '../assets/0CEF1F55-572A-477E-ADB4-7419D34BDB7A.jpg';
+import batticaloa from '../assets/Trincomalee-Express-Train.jpg';
+import anuradhapura from '../assets/colombo-to-anuradhapura-train-timetable.jped..jpg';
+import kandy from '../assets/train_station_kandy_sri_lanka-uai-1086x610.jpg';
+import ella from '../assets/80.jpg';
+import mathara from '../assets/2eksn8hrhr821.jpg';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Contact from './Contact';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-const passengers = [
+interface Passenger {
+  name: string;
+  from: string;
+  description: string;
+}
+
+interface Transport {
+  name: string;
+  description: string;
+  image: string;
+}
+
+const passengers: Passenger[] = [
   {
     name: 'John Doe',
     from: 'Colombo',
@@ -40,47 +62,63 @@ const passengers = [
   },
 ];
 
-const transports = [
+const transports: Transport[] = [
   {
-    name: 'Train 1',
+    name: 'Yal Devi',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
-    image: 'https://via.placeholder.com/400x300',
+    image: jaffna,
   },
   {
-    name: 'Train 2',
+    name: 'Udaya Devi',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
-    image: 'https://via.placeholder.com/400x300',
+    image: batticaloa,
   },
   {
-    name: 'Train 3',
+    name: 'Udarata Menike',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
-    image: 'https://via.placeholder.com/400x300',
+    image: ella,
   },
   {
-    name: 'Train 4',
+    name: 'Rajarata Rajina',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
-    image: 'https://via.placeholder.com/400x300',
+    image: anuradhapura,
   },
   {
-    name: 'Train 5',
+    name: 'Senkadagala Menike',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
-    image: 'https://via.placeholder.com/400x300',
+    image: kandy,
   },
   {
-    name: 'Train 6',
+    name: 'Ruhunu Kumari',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
-    image: 'https://via.placeholder.com/400x300',
+    image: mathara,
   },
 ];
 
 function Home() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    AOS.init();
+  }, []);
+  const massage = ['Welcome to Sri Lanka Railways', 'ආයුබෝවන් ශ්‍රී ලංකා'];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex(prevIndex => (prevIndex + 1) % massage.length);
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <div className="w-full min-h-screen bg-linear-to-b from-[#EBF8FF] to-white">
@@ -97,14 +135,18 @@ function Home() {
 
         {/* Hero Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-          <motion.h1
-            className="text-4xl md:text-6xl font-bold text-white mb-4"
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-          >
-            Welcome to Sri Lanka Railways
-          </motion.h1>
+          <AnimatePresence mode="wait">
+            <motion.h1
+              key={currentIndex}
+              className="text-4xl md:text-6xl font-bold text-white mb-6"
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 1 }}
+            >
+              {massage[currentIndex]}
+            </motion.h1>
+          </AnimatePresence>
 
           <motion.p
             className="text-white text-lg md:text-2xl mb-8 max-w-2xl"
@@ -115,14 +157,25 @@ function Home() {
             Experience the breathtaking beauty of Sri Lanka by train
           </motion.p>
 
-          <motion.button
-            onClick={() => navigate('/services/booking')}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-lg"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Book Your Ticket
-          </motion.button>
+          <div className="flex gap-3">
+            <motion.button
+              onClick={() => navigate('/services/booking')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Book Your Ticket
+            </motion.button>
+
+            <motion.button
+              onClick={() => navigate('/services')}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Choose Your Journey
+            </motion.button>
+          </div>
         </div>
       </section>
 
@@ -132,11 +185,11 @@ function Home() {
           Our Transports
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-6 max-w-7xl mx-auto ">
           {transports.map((transport, index) => (
             <motion.div
               key={index}
-              className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition"
+              className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition hover:scale-105"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -168,7 +221,7 @@ function Home() {
       {/* ================= PASSENGERS SECTION ================= */}
       <section className="py-20 bg-gray-50">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-14">
-          Our Passengers
+          Reviews
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 max-w-7xl mx-auto">
@@ -196,6 +249,9 @@ function Home() {
           ))}
         </div>
       </section>
+      <div data-aos="fade-up">
+        <Contact />
+      </div>
     </div>
   );
 }

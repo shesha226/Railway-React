@@ -1,7 +1,19 @@
 import train from '../assets/srilankatrain5-1.jpg';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import Contact from './Contact';
+import { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 function About() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // animation duration in ms
+      once: true, // whether animation should happen only once - while scrolling down
+    });
+  }, []);
   return (
     <div className="w-full">
       {/* ================= HERO SECTION ================= */}
@@ -117,10 +129,14 @@ function About() {
           className="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-100"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => navigate('/services/booking')}
         >
           Book a Journey
         </motion.button>
       </section>
+      <div data-aos="fade-up">
+        <Contact />
+      </div>
     </div>
   );
 }
